@@ -278,6 +278,10 @@ or command line `./gradlew bootRun` to run the project.
   },
   "servers": [
     {
+       "url": "https://microserviceuser-production.up.railway.app",
+       "description": "Generated server url production"
+    },
+    {
       "url": "http://localhost:8000",
       "description": "Generated server url"
     }
