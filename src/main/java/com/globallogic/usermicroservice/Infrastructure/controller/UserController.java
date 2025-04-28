@@ -34,7 +34,7 @@ public class UserController {
 
     @Operation(
             summary = "Registrar un nuevo usuario",
-            description = "Crea un usuario nuevo persistido en la base de datos H2, encripta la contraseña, y devuelve un JWT token de acceso."
+            description = "Crea un usuario nuevo"
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Usuario creado exitosamente",
@@ -50,7 +50,7 @@ public class UserController {
 
     @Operation(
             summary = "Login de usuario",
-            description = "Valida el token JWT del usuario, actualiza su último acceso y genera un nuevo token.",
+            description = "Valida el token JWT del usuario",
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponses(value = {
