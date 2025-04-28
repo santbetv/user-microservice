@@ -169,6 +169,86 @@ To run the application artifact you need:
 
 ### GitHub access to  [microservice-user](https://github.com/santbetv/user-microservice)
 
+## Data dump
+
+```bash
+  
+# Flow complete
+{
+  "name": "Juan Perez",
+  "email": "juanperez@example.com",
+  "password": "Passw0rd1",
+  "phones": [
+    {
+      "number": 1234567890,
+      "citycode": 1,
+      "contrycode": "57"
+    }
+  ]
+}
+
+# Flow successful
+{
+  "id": "f84d02ad-8031-4f67-83d0-b58e2e205950",
+  "created": "2025-04-28T04:26:26.389934",
+  "lastLogin": "2025-04-28T04:26:26.389955",
+  "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqdWFucGVyZXpAZXhhbXBsZS5jb20iLCJpc3MiOiJhcGkiLCJleHAiOjE3NDU4MzMyODYsImlhdCI6MTc0NTgzMjM4Nn0.NADxYh1tigZ_iV5OCsoKW7pUdFPhnmhdU3utL8tRxMI",
+  "active": true
+}
+
+# Request JSON inválido (password mala)
+
+{
+  "name": "Pedro Ramirez",
+  "email": "pedro@example.com",
+  "password": "password", 
+  "phones": [
+    {
+      "number": 987654321,
+      "citycode": 2,
+      "contrycode": "57"
+    }
+  ]
+}
+
+# Flow error
+{
+  "error": [
+    {
+      "timestamp": "2025-04-28T04:25:55.972378",
+      "codigo": 400,
+      "detail": "La contraseña debe tener 1 mayúscula, exactamente 2 números, y entre 8 y 12 caracteres."
+    }
+  ]
+}
+
+#Request JSON inválido (email malo)
+
+{
+  "name": "Maria Lopez",
+  "email": "maria-lopez.com", 
+  "password": "Asdf1234",
+  "phones": [
+    {
+      "number": 5555555,
+      "citycode": 3,
+      "contrycode": "57"
+    }
+  ]
+}
+
+# Flow error
+{
+  "error": [
+    {
+      "timestamp": "2025-04-28T04:25:23.51741",
+      "codigo": 400,
+      "detail": "Formato de correo inválido. Debe ser aaaa@dominio.com"
+    }
+  ]
+}
+ ``` 
+
 ## Getting started for console
 
 Once you have the .jar artifact, you just have to run `java -jar <path of your jar file> <command>`
