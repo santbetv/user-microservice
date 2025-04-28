@@ -56,62 +56,88 @@ touch src/main/java/com/globallogic/usermicroservice/UserMicroserviceApplication
 touch src/main/resources/application.properties
 touch src/test/java/com/globallogic/usermicroservice/UserMicroserviceApplicationTests.java
 
-
-
 ```
+
+### Diagrama-de-componentes
+
+![Architecture1](img/diagrama-de-componentes.png)
+
+### Diagrama-de-componentes
+
+![Architecture2](img/diagrama-de-secuencia-login.png)
+
+### Diagrama-de-componentes
+
+![Architecture3](img/diagrama-de-secuencia-sign-up.png)
 
 ### Architecture based on microservices and DDD
 
 ```bash
 ├── main
+│   ├── generated
 │   ├── java
 │   │   └── com
-│   │       └── project
-│   │           └── segurityjwt
+│   │       └── globallogic
+│   │           └── usermicroservice
 │   │               ├── application
-│   │               │   └── controller
-│   │               │       ├── AuthController.java
-│   │               │       ├── ClientController.java
-│   │               │       ├── ProductController.java
-│   │               │       └── SaleController.java
-│   │               ├── Application.java
+│   │               │   └── service
+│   │               │       └── impl
+│   │               │           └── UserService.java
 │   │               ├── domain
 │   │               │   ├── dto
-│   │               │   │   ├── AuthenticationRequest.java
-│   │               │   │   ├── AuthenticationResponse.java
-│   │               │   │   ├── LoginDto.java
-│   │               │   │   └── ResponseJwtDataDto.java
+│   │               │   │   ├── PhoneRequestDto.java
+│   │               │   │   ├── UserLoginResponseDto.java
+│   │               │   │   ├── UserRequestDto.java
+│   │               │   │   └── UserResponseDto.java
 │   │               │   ├── entity
-│   │               │   │   ├── Role.java
-│   │               │   │   └── Usuario.java
-│   │               │   ├── repository
-│   │               │   │   └── UserRepository.java
-│   │               │   └── service
-│   │               │       └── UserSecurityService.java
-│   │               └── infrastructure
-│   │                   └── auth
-│   │                       ├── aspect
-│   │                       │   ├── AppConfigAspect.java
-│   │                       │   ├── SecuredLoggingAspect.java
-│   │                       │   └── UnauthorizedAccessAspect.java
-│   │                       ├── CorsConfig.java
-│   │                       ├── JwtFilter.java
-│   │                       ├── JwtUtil.java
-│   │                       └── SecurityConfig.java
+│   │               │   │   ├── Phone.java
+│   │               │   │   └── User.java
+│   │               │   └── repository
+│   │               │       └── UserRepository.java
+│   │               ├── Infrastructure
+│   │               │   ├── common
+│   │               │   │   ├── configuration
+│   │               │   │   │   ├── CorsConfig.java
+│   │               │   │   │   ├── JwtUtil.java
+│   │               │   │   │   ├── SecurityConfig.java
+│   │               │   │   │   └── SwaggerConfig.java
+│   │               │   │   └── exception
+│   │               │   │       ├── ErrorGeneric.java
+│   │               │   │       ├── ErrorResponse.java
+│   │               │   │       └── GlobalExceptionHandler.java
+│   │               │   └── controller
+│   │               │       └── UserController.java
+│   │               └── UserMicroserviceApplication.java
 │   └── resources
-│       ├── application.properties
-│       ├── static
-│       └── templates
+│       └── application.properties
 └── test
-    └── java
-        └── com
-            └── project
-                └── segurityjwt
-                    └── ApplicationTests.java
+    ├── java
+    │   └── com
+    │       └── globallogic
+    │           └── usermicroservice
+    │               ├── application
+    │               │   └── service
+    │               │       └── impl
+    │               │           └── UserServiceTest.java
+    │               ├── Infrastructure
+    │               │   └── controller
+    │               │       └── UserControllerTest.java
+    │               └── UserMicroserviceApplicationTest.java
+    └── resources
 
 ```
 
-##         
+## Route to swagger in localhost
+
+```bash
+http://localhost:8000/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config#/
+```
+
+## Route to h2 in localhost
+
+```bash
+http://localhost:8000/h2
+```
 
 The architecture of the generated project consists of :
 
@@ -129,195 +155,253 @@ The architecture of the generated project consists of :
 
 To run the application artifact you need:
 
-- [JDK 21](https://www.oracle.com/java/technologies/javase/jdk21-archive-downloads.html)
-- [Maven 3.9](https://maven.apache.org)
-- Git access
-  to [template-springboot-service](https://gitlab.com/prodigio-master/centro-excelencia/desarrollo/java/template-springboot-service)
+- [JDK 11](https://www.oracle.com/java/technologies/javase/jdk11-archive-downloads.html)
+- [Gradle 7.1.1](https://docs.gradle.org/7.1.1/userguide/userguide.html)
 
-## Getting started
+### GitHub access to [microservice-user](https://github.com/santbetv/user-microservice)
+
+## Getting started for console
 
 Once you have the .jar artifact, you just have to run `java -jar <path of your jar file> <command>`
+or command line `./gradlew bootRun` to run the project.
 
 ### consumer yml file
 
-### warnings
-
-    1. You just have to modify the `outPath` attribute which is the path where your project will be created
-    2. in outPath cannot use backslash (\), just use slash (/), example : C:/user/something
+### Contract
 
 ```yaml
-service:
-    name: "developer-test-service"
-    description: "custom project description"
-    outPath: "<path/where/project/will/be/created>" # cannot use backslash (\), just use slash (/), example : C:/user/something
-    packageName: "com.custom.name"
-    version: "v1"
-operations:
-    -   name: "UserService"
-        rootPath: "https://jsonplaceholder.typicode.com"
-        headers:
-            -   name: "is a global header"
-                value: "Some value"
-        expose:
-            name: "UserController"
-            rootPath: "users"
-        methods:
-            -   name: "getUser"
-                type: "GET"
-                path: "/users/{0}"
-                attributes:
-                    -   name: "id"
-                        type: "Integer"
-                headers:
-                    -   name: "is a local header"
-                        value: "Some value"
-                mapTo:
-                    name: "UserData"
-                    attributes:
-                        -   name: "userId"
-                            type: "int"
-                            from: "id"
-                        -   name: "userEmail"
-                            type: "String"
-                            from: "email"
-                        -   name: "street"
-                            type: "String"
-                            from: "address.street"
-                        -   name: "lat"
-                            type: "Double"
-                            from: "address.geo.lat"
-                        -   name: "lng"
-                            type: "Double"
-                            from: "address.geo.lng"
-                expose:
-                    path: ""
-                    type: "GET_ONE"
-            -   name: "getAllUsers"
-                type: "GET"
-                path: "/users"
-                headers:
-                    -   name: "is a local header"
-                        value: "Some value"
-                mapTo:
-                    name: "UserData"
-                    many: true
-                    attributes:
-                        -   name: "userId"
-                            type: "int"
-                            from: "id"
-                        -   name: "userEmail"
-                            type: "String"
-                            from: "email"
-                        -   name: "street"
-                            type: "String"
-                            from: "address.street"
-                        -   name: "lat"
-                            type: "Double"
-                            from: "address.geo.lat"
-                        -   name: "lng"
-                            type: "Double"
-                            from: "address.geo.lng"
-                expose:
-                    path: ""
-                    type: "GET_ALL"
-            -   name: "addUser"
-                type: "POST"
-                path: "/users"
-                headers:
-                    -   name: "is a local header"
-                        value: "Some value"
-                request:
-                    name: "AddUserDto"
-                    attributes:
-                        -   name: "userName"
-                            type: "String"
-                        -   name: "id"
-                            type: "Long"
-                mapTo:
-                    name: "AuxiliarCreatedUSer"
-                    attributes:
-                        -   name: "creationId"
-                            type: "Long"
-                            from: "id"
-                expose:
-                    path: ""
-                    type: "CREATE"
-            -   name: "editUser"
-                type: "PUT"
-                path: "/users/{0}"
-                attributes:
-                    -   name: "id"
-                        type: "Integer"
-                headers:
-                    -   name: "is a local header"
-                        value: "Some value"
-                request:
-                    name: "EditUserDto"
-                    attributes:
-                        -   name: "userName"
-                            type: "String"
-                        -   name: "id"
-                            type: "Long"
-                mapTo:
-                    name: "EditedUserResponse"
-                    attributes:
-                        -   name: "creationId"
-                            type: "Long"
-                            from: "id"
-                expose:
-                    path: ""
-                    type: "UPDATE"
-    -   name: "WikiService"
-        rootPath: "https://hacker-news.firebaseio.com/v0/item/8863.json"
-        expose:
-            name: "WikiController"
-            rootPath: "news"
-        methods:
-            -   name: "getWikiData"
-                type: "GET"
-                path: ""
-                mapTo:
-                    name: "WikiData"
-                    attributes:
-                        -   name: "createdIn"
-                            type: "String"
-                            from: "by"
-                        -   name: "newsId"
-                            type: "Integer"
-                            from: "id"
-                        -   name: "kidsData"
-                            type: "String"
-                            many: true
-                            from: "kids"
-                expose:
-                    path: ""
-                    type: "GET_ALL"
-    -   name: "CatService"
-        rootPath: "https://api.artic.edu/api/v1/artworks"
-        expose:
-            name: "CatController"
-            rootPath: "animals"
-        methods:
-            -   name: "getAnimalData"
-                type: "GET"
-                path: "/search?q={0}"
-                attributes:
-                    -   name: "searchTerm"
-                        type: "String"
-                mapTo:
-                    name: "AnimalData"
-                    attributes:
-                        -   name: "jsonData"
-                            type: "String"
-                            from: "data"
-                            many: true
-                            json: true
-                        -   name: "total"
-                            type: "Integer"
-                            from: "pagination.total"
-                        -   name: "links"
-                            type: "String"
-                            many: true
-                            from: "info.license_links"
-                        -   name: "customConfig"
-                            type: "String"
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "API User Management",
+    "description": "Microservicio para registro de usuarios y autenticación con JWT.",
+    "contact": {
+      "name": "Equipo de Desarrollo",
+      "email": "devs@empresa.com"
+    },
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/api/auth/sign-up": {
+      "post": {
+        "tags": [
+          "user-controller"
+        ],
+        "summary": "Registrar un nuevo usuario",
+        "description": "Crea un usuario nuevo",
+        "operationId": "signUp",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Usuario creado exitosamente",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos de entrada inválidos",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "El correo ya existe en el sistema",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": [
+          "user-controller"
+        ],
+        "summary": "Login de usuario",
+        "description": "Valida el token JWT del usuario",
+        "operationId": "login",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Login exitoso",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserLoginResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token inválido o expirado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserLoginResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [ ]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PhoneRequestDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "number": {
+            "type": "string"
+          },
+          "citycode": {
+            "type": "string"
+          },
+          "contrycode": {
+            "type": "string"
+          }
+        }
+      },
+      "UserRequestDto": {
+        "required": [
+          "email",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "pattern": "^(?=.*[A-Z])(?=(?:.*\\d.*\\d)[^\\d]*$)[a-zA-Z\\d]{8,12}$",
+            "type": "string"
+          },
+          "phones": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PhoneRequestDto"
+            }
+          }
+        }
+      },
+      "UserResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastLogin": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "token": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          }
+        }
+      },
+      "UserLoginResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastLogin": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "token": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "phones": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PhoneRequestDto"
+            }
+          },
+          "active": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
+```
