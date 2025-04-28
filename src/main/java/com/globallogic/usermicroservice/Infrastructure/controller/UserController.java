@@ -27,10 +27,14 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/auth")
-@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
+
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @Operation(
             summary = "Registrar un nuevo usuario",

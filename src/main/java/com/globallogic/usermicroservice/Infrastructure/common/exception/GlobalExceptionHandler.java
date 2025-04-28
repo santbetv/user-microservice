@@ -19,29 +19,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException ex) {
         String errorMessage = ex.getBindingResult().getFieldError().getDefaultMessage();
-        Error error = new Error(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), errorMessage);
-        return new ResponseEntity<>(new ErrorResponse(Collections.singletonList(error)), HttpStatus.BAD_REQUEST);
+        ErrorGeneric errorGeneric = new ErrorGeneric(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), errorMessage);
+        return new ResponseEntity<>(new ErrorResponse(Collections.singletonList(errorGeneric)), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException ex) {
-        Error error = new Error(LocalDateTime.now(), HttpStatus.CONFLICT.value(), ex.getMessage());
-        return new ResponseEntity<>(new ErrorResponse(Collections.singletonList(error)), HttpStatus.CONFLICT);
+        ErrorGeneric errorGeneric = new ErrorGeneric(LocalDateTime.now(), HttpStatus.CONFLICT.value(), ex.getMessage());
+        return new ResponseEntity<>(new ErrorResponse(Collections.singletonList(errorGeneric)), HttpStatus.CONFLICT);
     }
 }
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-class Error {
-    private LocalDateTime timestamp;
-    private int codigo;
-    private String detail;
-}
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-class ErrorResponse {
-    private List<Error> error;
-}

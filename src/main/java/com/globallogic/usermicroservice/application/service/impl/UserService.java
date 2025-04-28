@@ -9,6 +9,7 @@ import com.globallogic.usermicroservice.domain.entity.Phone;
 import com.globallogic.usermicroservice.domain.entity.User;
 import com.globallogic.usermicroservice.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,16 +17,24 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+
+    @Autowired
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
+    }
 
     public UserResponseDto register(UserRequestDto request) {
         userRepository.findByEmail(request.getEmail())
@@ -56,16 +65,19 @@ public class UserService {
                 .build();
     }
 
-    private List<Phone> mapPhones(List<PhoneRequestDto> phonesDto) {
-        if (phonesDto == null) return List.of();
-        return phonesDto.stream()
-                .map(p -> Phone.builder()
-                        .number(p.getNumber())
-                        .cityCode(p.getCitycode())
-                        .countryCode(p.getContrycode())
+    private List<Phone> mapPhones(List<PhoneRequestDto> phoneDtos) {
+        return Optional.ofNullable(phoneDtos)
+                .orElse(List.of())
+                .stream()
+                .map(phoneDto -> Phone.builder()
+                        .id(phoneDto.getId())
+                        .cityCode(phoneDto.getCitycode())
+                        .countryCode(phoneDto.getContrycode())
+                        .number(phoneDto.getNumber())
                         .build())
                 .collect(Collectors.toList());
     }
+
 
     public UserLoginResponseDto login(String token) {
         // Validar el token y extraer el email (subject)
