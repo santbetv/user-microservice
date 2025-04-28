@@ -137,6 +137,12 @@ touch src/test/java/com/globallogic/usermicroservice/UserMicroserviceApplication
 ## Route to swagger in localhost
 
 ```bash
+https://microserviceuser-production.up.railway.app/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config#/
+```
+
+## Route to swagger in localhost
+
+```bash
 http://localhost:8000/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config#/
 ```
 
