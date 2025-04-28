@@ -10,9 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@OpenAPIDefinition(
-        info = @Info(title = "User API", version = "1.0", description = "API para registro y login de usuarios")
-)
 @SecurityScheme(
         name = "bearerAuth",
         type = SecuritySchemeType.HTTP,
@@ -20,4 +17,17 @@ import org.springframework.context.annotation.Configuration;
         bearerFormat = "JWT"
 )
 public class SwaggerConfig {
+    @Bean
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+                .info(new Info()
+                        .title("API User Management")
+                        .version("1.0")
+                        .description("Microservicio para registro de usuarios y autenticación con JWT.")
+                        .contact(new Contact()
+                                .name("Equipo de Desarrollo")
+                                .email("devs@empresa.com")
+                        )
+                );
+    }
 }
