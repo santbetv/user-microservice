@@ -7,11 +7,12 @@
 The project is a code generator using CLI manual:
 
 ```bash
+# Creando el proyecto
 mkdir user-microservice
 cd user-microservice
 gradle init --type java-application
 
-Edita el build.gradle
+# Editado el build.gradle
 
 plugins {
     id 'org.springframework.boot' version '2.5.14'
@@ -29,19 +30,25 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'com.auth0:java-jwt:4.3.0'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springdoc:springdoc-openapi-ui:1.5.12'
     runtimeOnly 'com.h2database:h2'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
 }
 
 test {
     useJUnitPlatform()
 }
 
-creando estrutura de carpetas
+
+# creando estrutura de carpetas
 
 # Código fuente principal
 mkdir -p src/main/java/com/globallogic/usermicroservice
@@ -62,11 +69,11 @@ touch src/test/java/com/globallogic/usermicroservice/UserMicroserviceApplication
 
 ![Architecture1](img/diagrama-de-componentes.png)
 
-### Diagrama-de-componentes
+### Diagrama-de-secuencia-login
 
 ![Architecture2](img/diagrama-de-secuencia-login.png)
 
-### Diagrama-de-componentes
+### Diagrama-de-secuencia-sign-up
 
 ![Architecture3](img/diagrama-de-secuencia-sign-up.png)
 
@@ -158,7 +165,9 @@ To run the application artifact you need:
 - [JDK 11](https://www.oracle.com/java/technologies/javase/jdk11-archive-downloads.html)
 - [Gradle 7.1.1](https://docs.gradle.org/7.1.1/userguide/userguide.html)
 
-### GitHub access to [microservice-user](https://github.com/santbetv/user-microservice)
+# Download
+
+### GitHub access to  [microservice-user](https://github.com/santbetv/user-microservice)
 
 ## Getting started for console
 
